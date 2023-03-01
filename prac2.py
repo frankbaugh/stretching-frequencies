@@ -47,7 +47,6 @@ def get_energies(mol, r, theta):
 
     ## Create a new filename variable each iteration of a loop to open all
     ## the necessary files 
-    
     for i in range(len(r)):
         for j in range(len(theta)):
             file_name = mol + ".r"
@@ -97,7 +96,8 @@ def equilibrium(r, theta, energy):
 
     energy_eq = min(energy)
     energy_eq_index = energy.index(energy_eq)
-    min_energy = round(energy_eq, 4)
+    min_energy = format(energy_eq, '.2g') # 2 sf appropriate given data precision
+
 
     theta_eq_index = energy_eq_index % (len(theta))
     theta_eq = round(theta[theta_eq_index], 1)
@@ -105,14 +105,12 @@ def equilibrium(r, theta, energy):
     r_eq_index = round(len(r) * energy_eq_index / len(energy))
     r_eq = round(r[r_eq_index], 2)
 
-
     print("***********************************")
     print()
-    print("The equilibrium energy is " + str(min_energy) + " eV")
+    print("The equilibrium energy is " + min_energy + " eV (2 s.f)")
     print()
     print("Which occurs at r = " + str(r_eq) + " A, and theta = " + str(theta_eq) + " degrees")
     print()
-
     print("***********************************")
 
     return r_eq_index, theta_eq_index, energy_eq_index
@@ -161,14 +159,13 @@ def fit_modes(r, theta, energy, r_eq_index, theta_eq_index, energy_eq_index):
     ## plt.show()
 
     ## Relate the spring constant to the squared term of polynomial fit
-
     k_r = 2 * p_r[0]
     k_t = 2 * p_t[0]
 
     return k_r, k_t
 
 def print_frequencies(k_r, k_t, r, r_eq_index):
-
+    
     amu = 1.66053886 * pow(10, -27)
     hz_cm = 3.3356 * pow(10, -11)
     conv = hz_cm/(2 * pi)
@@ -181,11 +178,11 @@ def print_frequencies(k_r, k_t, r, r_eq_index):
     v_r = conv * sqrt(k_r / (2 * m_u))
     v_t = conv * sqrt(k_t/ (r_eq * r_eq * 0.5 * m_u))
 
-    ## Lit H2O: 3585, 1885 H2S: 2615, 1183
+    ## Literature H2O: 3585, 1885 H2S: 2615, 1183
     print()
     print("Vibrational Frequencies are: ")
-    print("Symmetric stretch: " + str(round(v_r, 1)) + " cm^-1")
-    print("Bending Mode: " + str(round(v_t, 1)) + " cm^-1")
+    print("Symmetric stretch: " + format(v_r, '.2g') + " cm^-1")
+    print("Bending Mode: " + format(v_t, '.2g') + " cm^-1")
     print()
 
 main()
